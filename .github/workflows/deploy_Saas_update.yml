@@ -1,10 +1,21 @@
-name: Deploy Changes
+name: Deploy website and Changes
 
 on:
-  push:
-    branches: [ main ]
-    
+    push:
+      branches: [ main ]
+  
 jobs:
     build:
       runs-on: ubuntu-latest
-      
+
+      steps: 
+      - uses: actions/checkout@v2
+      - name: Install NodeJS
+        uses: actions/setup-node@v2-beta
+        with: 
+          node-version: 'lts/*'
+      - name: Install Surge
+        run: npm install --global surge
+
+      -  name: Deploy Changes on Surge
+         uses: surge ./ saas-development.surge.sh --token ${{ secret.SURGE_TOKEN }}
